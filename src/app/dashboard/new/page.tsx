@@ -18,10 +18,11 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { PageHeader } from '@/components/page-header';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { mockDataSources } from '@/lib/mock-data';
 import { useToast } from '@/hooks/use-toast';
 import { ArrowLeft } from 'lucide-react';
+import { Switch } from '@/components/ui/switch';
 
 const newChatbotFormSchema = z.object({
   name: z.string().min(3, {
@@ -35,6 +36,7 @@ const newChatbotFormSchema = z.object({
     .refine((value) => value.some((item) => item), {
       message: 'You have to select at least one knowledge source.',
     }),
+  multilingual: z.boolean(),
 });
 
 export default function NewChatbotPage() {
@@ -47,6 +49,7 @@ export default function NewChatbotPage() {
       name: '',
       persona: '',
       knowledgeSourceIds: [],
+      multilingual: false,
     },
   });
 
@@ -172,6 +175,41 @@ export default function NewChatbotPage() {
               />
             </CardContent>
           </Card>
+           <Card>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <div className='space-y-1.5'>
+                  <CardTitle>3. Advanced</CardTitle>
+                  <CardDescription>
+                    Advanced settings for your chatbot.
+                  </CardDescription>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <FormField
+                  control={form.control}
+                  name="multilingual"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                      <div className="space-y-0.5">
+                        <FormLabel className="text-base">
+                          Multilingual Support
+                        </FormLabel>
+                        <FormDescription>
+                          Automatically detect user language and translate
+                          responses.
+                        </FormDescription>
+                      </div>
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </CardContent>
+            </Card>
 
           <div className="flex justify-end">
             <Button type="submit" size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">Create Chatbot</Button>

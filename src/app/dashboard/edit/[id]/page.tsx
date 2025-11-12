@@ -21,10 +21,11 @@ import { PageHeader } from '@/components/page-header';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { mockChatbots, mockDataSources } from '@/lib/mock-data';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft, Bot, MessageSquare } from 'lucide-react';
+import { ArrowLeft, Bot, MessageSquare, Globe } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { TestChatbotDialog } from '@/components/test-chatbot-dialog';
 import type { Chatbot } from '@/lib/types';
+import { Switch } from '@/components/ui/switch';
 
 const editChatbotFormSchema = z.object({
   name: z.string().min(3, {
@@ -41,6 +42,7 @@ const editChatbotFormSchema = z.object({
   primaryColor: z.string(),
   backgroundColor: z.string(),
   botMessageColor: z.string(),
+  multilingual: z.boolean(),
 });
 
 // A simple function to determine if text should be light or dark
@@ -74,6 +76,7 @@ export default function EditChatbotPage() {
       primaryColor: '#6366F1',
       backgroundColor: '#111827',
       botMessageColor: '#1F2937',
+      multilingual: false,
     },
   });
 
@@ -91,6 +94,7 @@ export default function EditChatbotPage() {
         primaryColor: '#6366F1',
         backgroundColor: '#111827',
         botMessageColor: '#1F2937',
+        multilingual: chatbot.multilingual,
       });
     }
   }, [chatbot, form]);
@@ -234,11 +238,46 @@ export default function EditChatbotPage() {
                     />
                     </CardContent>
                 </Card>
+                 <Card>
+                    <CardHeader className="flex flex-row items-center justify-between">
+                      <div className='space-y-1.5'>
+                        <CardTitle>3. Advanced</CardTitle>
+                        <CardDescription>
+                          Advanced settings for your chatbot.
+                        </CardDescription>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      <FormField
+                        control={form.control}
+                        name="multilingual"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                            <div className="space-y-0.5">
+                              <FormLabel className="text-base">
+                                Multilingual Support
+                              </FormLabel>
+                              <FormDescription>
+                                Automatically detect user language and translate
+                                responses.
+                              </FormDescription>
+                            </div>
+                            <FormControl>
+                              <Switch
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+                    </CardContent>
+                  </Card>
             </div>
             <div className="space-y-8">
                 <Card>
                     <CardHeader>
-                        <CardTitle>3. Appearance</CardTitle>
+                        <CardTitle>4. Appearance</CardTitle>
                         <CardDescription>Customize this bot's colors and preview it.</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">

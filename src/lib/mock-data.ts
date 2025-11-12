@@ -46,6 +46,7 @@ export const mockChatbots: Chatbot[] = [
     lastUpdatedAt: '2024-07-20T11:30:00Z',
     monthlyConversations: 1254,
     knowledgeSources: ['ds_2', 'ds_5'],
+    multilingual: true,
   },
   {
     id: 'bot_2',
@@ -54,6 +55,7 @@ export const mockChatbots: Chatbot[] = [
     lastUpdatedAt: '2024-07-18T10:00:00Z',
     monthlyConversations: 321,
     knowledgeSources: ['ds_3'],
+    multilingual: false,
   },
   {
     id: 'bot_3',
@@ -62,6 +64,7 @@ export const mockChatbots: Chatbot[] = [
     lastUpdatedAt: '2024-07-19T16:45:00Z',
     monthlyConversations: 0,
     knowledgeSources: ['ds_1', 'ds_2'],
+    multilingual: false,
   },
   {
     id: 'bot_4',
@@ -70,6 +73,7 @@ export const mockChatbots: Chatbot[] = [
     lastUpdatedAt: '2024-07-21T12:00:00Z',
     monthlyConversations: 890,
     knowledgeSources: ['ds_4'],
+    multilingual: true,
   },
 ];
 

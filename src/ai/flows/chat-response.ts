@@ -15,6 +15,7 @@ const ChatResponseInputSchema = z.object({
   message: z.string().describe('The user\'s message to the chatbot.'),
   persona: z.string().describe('The personality and rules for the chatbot.'),
   knowledgeSourceNames: z.array(z.string()).describe('The names of the knowledge sources the chatbot can access.'),
+  enableTranslation: z.boolean().optional().describe('Whether to enable auto-translation of the response.'),
 });
 export type ChatResponseInput = z.infer<typeof ChatResponseInputSchema>;
 
@@ -40,6 +41,13 @@ const prompt = ai.definePrompt({
   {{#each knowledgeSourceNames}}
   - {{{this}}}
   {{/each}}
+
+  {{#if enableTranslation}}
+  **Language Translation**
+  - Detect the language of the user's message.
+  - Your final response MUST be in the same language as the user's message.
+  - You must still use the English-based knowledge sources provided. Translate the information accurately to the user's language.
+  {{/if}}
 
   **User's Message**
   {{{message}}}

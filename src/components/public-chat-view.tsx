@@ -89,6 +89,7 @@ export function PublicChatView({ chatbot }: PublicChatViewProps) {
         message: inputValue,
         persona: persona,
         knowledgeSourceNames: attachedSources,
+        enableTranslation: chatbot.multilingual,
       });
 
       const botResponse: Message = { id: crypto.randomUUID(), sender: 'bot', text: response.response, feedback: null };

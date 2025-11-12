@@ -48,13 +48,13 @@ export function TestChatbotDialog({ chatbot, isOpen, onOpenChange }: TestChatbot
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && chatbot) {
         setMessages([
-            { id: 'initial', sender: 'bot', text: "Hello! I'm a preview of your bot. Ask me anything!"}
+            { id: 'initial', sender: 'bot', text: `Hello! I'm a preview of ${chatbot.name}. Ask me anything!`}
         ]);
         setInputValue('');
     }
-  }, [isOpen]);
+  }, [isOpen, chatbot]);
 
   useEffect(() => {
     // Scroll to the bottom of the chat on new messages
@@ -105,6 +105,7 @@ export function TestChatbotDialog({ chatbot, isOpen, onOpenChange }: TestChatbot
         message: inputValue,
         persona: persona,
         knowledgeSourceNames: attachedSources,
+        enableTranslation: chatbot.multilingual,
       });
 
       const botResponse: Message = { id: crypto.randomUUID(), sender: 'bot', text: response.response, feedback: null };
