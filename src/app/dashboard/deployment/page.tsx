@@ -13,21 +13,21 @@ import { mockChatbots } from '@/lib/mock-data';
 
 export default function DeploymentPage() {
   const [selectedBotId, setSelectedBotId] = useState<string | undefined>(mockChatbots[0]?.id);
-  const [origin, setOrigin] = useState('');
+  const [directLink, setDirectLink] = useState('');
+  const [embedCode, setEmbedCode] = useState('');
+  const [iframeCode, setIframeCode] = useState('');
   const { toast } = useToast();
+  const selectedChatbot = mockChatbots.find(bot => bot.id === selectedBotId);
+
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setOrigin(window.location.origin);
+    if (typeof window !== 'undefined' && selectedChatbot) {
+      const origin = window.location.origin;
+      setDirectLink(`${origin}/c/${selectedChatbot.id}`);
+      setEmbedCode(`<script src="${origin}/widget.js" data-bot-id="${selectedChatbot.id}" async defer></script>`);
+      setIframeCode(`<iframe src="${origin}/c/${selectedChatbot.id}" width="100%" height="500" frameborder="0"></iframe>`);
     }
-  }, []);
-
-  const selectedChatbot = mockChatbots.find(bot => bot.id === selectedBotId);
-  
-  const directLink = selectedChatbot ? `${origin}/c/${selectedChatbot.id}` : '';
-  const embedCode = selectedChatbot ? `<script src="${origin}/widget.js" data-bot-id="${selectedChatbot.id}" async defer></script>` : '';
-  const iframeCode = selectedChatbot ? `<iframe src="${directLink}" width="100%" height="500" frameborder="0"></iframe>` : '';
-
+  }, [selectedChatbot]);
 
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
