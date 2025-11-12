@@ -21,8 +21,10 @@ import { PageHeader } from '@/components/page-header';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { mockChatbots, mockDataSources } from '@/lib/mock-data';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft, Bot } from 'lucide-react';
+import { ArrowLeft, Bot, MessageSquare } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { TestChatbotDialog } from '@/components/test-chatbot-dialog';
+import type { Chatbot } from '@/lib/types';
 
 const editChatbotFormSchema = z.object({
   name: z.string().min(3, {
@@ -60,6 +62,7 @@ export default function EditChatbotPage() {
   const { toast } = useToast();
   const botId = params.id as string;
 
+  const [isTestDialogOpen, setTestDialogOpen] = useState(false);
   const chatbot = mockChatbots.find((bot) => bot.id === botId);
 
   const form = useForm<z.infer<typeof editChatbotFormSchema>>({
@@ -101,6 +104,10 @@ export default function EditChatbotPage() {
     router.push('/dashboard');
   }
 
+  const handleTestClick = () => {
+    setTestDialogOpen(true);
+  };
+
   if (!chatbot) {
     return (
       <div className="flex flex-col items-center justify-center h-screen">
@@ -118,10 +125,16 @@ export default function EditChatbotPage() {
         title={`Edit "${chatbot.name}"`}
         description="Modify your AI assistant's configuration and appearance."
         action={
-          <Button variant="outline" onClick={() => router.back()}>
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Dashboard
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" onClick={handleTestClick}>
+              <MessageSquare className="mr-2 h-4 w-4" />
+              Test
+            </Button>
+            <Button variant="outline" onClick={() => router.back()}>
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back
+            </Button>
+          </div>
         }
       />
       <Form {...form}>
@@ -341,6 +354,11 @@ export default function EditChatbotPage() {
           </div>
         </form>
       </Form>
+      <TestChatbotDialog
+        chatbot={chatbot}
+        isOpen={isTestDialogOpen}
+        onOpenChange={setTestDialogOpen}
+      />
     </>
   );
 }
