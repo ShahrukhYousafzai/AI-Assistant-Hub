@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button';
 import { ClipboardCopy, Code, Frame, Globe } from 'lucide-react';
 import type { Chatbot } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
+import { useEffect, useState } from 'react';
 
 type DeployChatbotDialogProps = {
   chatbot: Chatbot | null;
@@ -23,11 +24,18 @@ type DeployChatbotDialogProps = {
 
 export function DeployChatbotDialog({ chatbot, isOpen, onOpenChange }: DeployChatbotDialogProps) {
   const { toast } = useToast();
+  const [origin, setOrigin] = useState('');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setOrigin(window.location.origin);
+    }
+  }, []);
 
   if (!chatbot) return null;
 
-  const embedCode = `<script src="https://example.com/widget.js" data-bot-id="${chatbot.id}" async defer></script>`;
-  const directLink = `https://chat.example.com/${chatbot.id}`;
+  const directLink = `${origin}/c/${chatbot.id}`;
+  const embedCode = `<script src="${origin}/widget.js" data-bot-id="${chatbot.id}" async defer></script>`;
   const iframeCode = `<iframe src="${directLink}" width="100%" height="500" frameborder="0"></iframe>`;
 
   const handleCopy = (text: string) => {
@@ -47,21 +55,39 @@ export function DeployChatbotDialog({ chatbot, isOpen, onOpenChange }: DeployCha
             Choose a deployment method to make your chatbot available to users.
           </DialogDescription>
         </DialogHeader>
-        <Tabs defaultValue="embed" className="mt-4">
+        <Tabs defaultValue="link" className="mt-4">
           <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="embed">
-                <Code className="mr-2 h-4 w-4"/>
-                Embed
-            </TabsTrigger>
             <TabsTrigger value="link">
                 <Globe className="mr-2 h-4 w-4"/>
                 Direct Link
+            </TabsTrigger>
+            <TabsTrigger value="embed">
+                <Code className="mr-2 h-4 w-4"/>
+                Embed
             </TabsTrigger>
             <TabsTrigger value="iframe">
                 <Frame className="mr-2 h-4 w-4"/>
                 Iframe
             </TabsTrigger>
           </TabsList>
+           <TabsContent value="link" className="mt-4">
+             <div className="space-y-4">
+               <p className="text-sm text-muted-foreground">
+                Share this direct link with your users via email, social media, or other channels.
+              </p>
+              <div className="relative">
+                <Input value={directLink} readOnly className="pr-12 h-10 font-mono text-sm bg-secondary" />
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute top-1/2 right-1 -translate-y-1/2 h-8 w-8"
+                  onClick={() => handleCopy(directLink)}
+                >
+                  <ClipboardCopy className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </TabsContent>
           <TabsContent value="embed" className="mt-4">
             <div className="space-y-4">
               <p className="text-sm text-muted-foreground">
@@ -74,24 +100,6 @@ export function DeployChatbotDialog({ chatbot, isOpen, onOpenChange }: DeployCha
                   size="icon"
                   className="absolute top-2 right-2 h-7 w-7"
                   onClick={() => handleCopy(embedCode)}
-                >
-                  <ClipboardCopy className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          </TabsContent>
-          <TabsContent value="link" className="mt-4">
-             <div className="space-y-4">
-               <p className="text-sm text-muted-foreground">
-                Share this direct link with your users via email, social media, or other channels.
-              </p>
-              <div className="relative">
-                <Input value={directLink} readOnly className="pr-12 h-10 font-mono text-sm bg-secondary" />
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="absolute top-1/2 right-1 -translate-y-1/2 h-8 w-8"
-                  onClick={() => handleCopy(directLink)}
                 >
                   <ClipboardCopy className="h-4 w-4" />
                 </Button>

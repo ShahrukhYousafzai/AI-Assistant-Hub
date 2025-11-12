@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PageHeader } from '@/components/page-header';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -10,17 +10,24 @@ import { Input } from '@/components/ui/input';
 import { ClipboardCopy, Globe, Code, Frame } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { mockChatbots } from '@/lib/mock-data';
-import type { Chatbot } from '@/lib/types';
 
 export default function DeploymentPage() {
   const [selectedBotId, setSelectedBotId] = useState<string | undefined>(mockChatbots[0]?.id);
+  const [origin, setOrigin] = useState('');
   const { toast } = useToast();
 
-  const selectedChatbot = mockChatbots.find(bot => bot.id === selectedBotId);
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setOrigin(window.location.origin);
+    }
+  }, []);
 
-  const embedCode = selectedChatbot ? `<script src="https://example.com/widget.js" data-bot-id="${selectedChatbot.id}" async defer></script>` : '';
-  const directLink = selectedChatbot ? `https://chat.example.com/${selectedChatbot.id}` : '';
+  const selectedChatbot = mockChatbots.find(bot => bot.id === selectedBotId);
+  
+  const directLink = selectedChatbot ? `${origin}/c/${selectedChatbot.id}` : '';
+  const embedCode = selectedChatbot ? `<script src="${origin}/widget.js" data-bot-id="${selectedChatbot.id}" async defer></script>` : '';
   const iframeCode = selectedChatbot ? `<iframe src="${directLink}" width="100%" height="500" frameborder="0"></iframe>` : '';
+
 
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -62,33 +69,6 @@ export default function DeploymentPage() {
             <Card>
                 <CardHeader className="flex flex-row items-center gap-4 space-y-0">
                     <div className="p-3 rounded-lg bg-secondary">
-                        <Code className="h-6 w-6 text-secondary-foreground" />
-                    </div>
-                    <div>
-                        <CardTitle>Embed on Your Website</CardTitle>
-                        <CardDescription>Add a floating chat widget to your site.</CardDescription>
-                    </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                     <p className="text-sm text-muted-foreground">
-                        Copy and paste this snippet into your website's HTML to add a floating chat bubble.
-                    </p>
-                    <div className="relative">
-                        <Textarea value={embedCode} readOnly className="pr-12 h-32 font-mono text-xs bg-secondary" />
-                        <Button
-                        variant="ghost"
-                        size="icon"
-                        className="absolute top-2 right-2 h-7 w-7"
-                        onClick={() => handleCopy(embedCode)}
-                        >
-                        <ClipboardCopy className="h-4 w-4" />
-                        </Button>
-                    </div>
-                </CardContent>
-            </Card>
-             <Card>
-                <CardHeader className="flex flex-row items-center gap-4 space-y-0">
-                    <div className="p-3 rounded-lg bg-secondary">
                         <Globe className="h-6 w-6 text-secondary-foreground" />
                     </div>
                     <div>
@@ -107,6 +87,33 @@ export default function DeploymentPage() {
                         size="icon"
                         className="absolute top-1/2 right-1 -translate-y-1/2 h-8 w-8"
                         onClick={() => handleCopy(directLink)}
+                        >
+                        <ClipboardCopy className="h-4 w-4" />
+                        </Button>
+                    </div>
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader className="flex flex-row items-center gap-4 space-y-0">
+                    <div className="p-3 rounded-lg bg-secondary">
+                        <Code className="h-6 w-6 text-secondary-foreground" />
+                    </div>
+                    <div>
+                        <CardTitle>Embed on Your Website</CardTitle>
+                        <CardDescription>Add a floating chat widget to your site.</CardDescription>
+                    </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                     <p className="text-sm text-muted-foreground">
+                        Copy and paste this snippet into your website's HTML to add a floating chat bubble.
+                    </p>
+                    <div className="relative">
+                        <Textarea value={embedCode} readOnly className="pr-12 h-32 font-mono text-xs bg-secondary" />
+                        <Button
+                        variant="ghost"
+                        size="icon"
+                        className="absolute top-2 right-2 h-7 w-7"
+                        onClick={() => handleCopy(embedCode)}
                         >
                         <ClipboardCopy className="h-4 w-4" />
                         </Button>
