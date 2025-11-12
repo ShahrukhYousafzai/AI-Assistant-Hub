@@ -41,7 +41,7 @@ export function ChatbotCard({ chatbot, onDeploy }: ChatbotCardProps) {
             Edit
           </Link>
         </Button>
-        <Button variant="default" onClick={() => onDeploy(chatbot)} className="bg-accent text-accent-foreground hover:bg-accent/90">
+        <Button onClick={() => onDeploy(chatbot)} className="bg-accent text-accent-foreground hover:bg-accent/90">
           <Share2 />
           Deploy
         </Button>
