@@ -110,9 +110,9 @@ export function TestChatbotDialog({ chatbot, isOpen, onOpenChange }: TestChatbot
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md p-0">
+      <DialogContent className="sm:max-w-md p-0 flex flex-col h-[60vh]">
         <div 
-            className="flex items-center justify-between rounded-t-lg p-3"
+            className="flex items-center justify-between p-3 flex-shrink-0"
             style={{backgroundColor: primaryColor, color: getTextColor(primaryColor)}}
         >
             <div className="flex items-center gap-2">
@@ -122,32 +122,32 @@ export function TestChatbotDialog({ chatbot, isOpen, onOpenChange }: TestChatbot
                 <p className="font-semibold">{chatbot.name}</p>
             </div>
         </div>
-        <div className="flex flex-col h-[50vh] p-4 pt-0">
-            <div 
-                ref={chatContainerRef} 
-                className="flex-1 space-y-4 overflow-y-auto rounded-b-lg p-4 -mx-4"
-                style={{backgroundColor: backgroundColor}}
-            >
-                {messages.map((message, index) => (
-                    <div key={index} className={`flex items-start gap-3 ${message.sender === 'user' ? 'flex-row-reverse' : ''}`}>
-                        <div className={`rounded-lg px-4 py-2 max-w-[80%] text-sm`}
-                            style={{
-                                backgroundColor: message.sender === 'bot' ? botMessageColor : primaryColor,
-                                color: getTextColor(message.sender === 'bot' ? botMessageColor : primaryColor),
-                            }}
-                        >
-                            {message.text}
-                        </div>
+        <div 
+            ref={chatContainerRef} 
+            className="flex-1 space-y-4 overflow-y-auto p-4"
+            style={{backgroundColor: backgroundColor}}
+        >
+            {messages.map((message, index) => (
+                <div key={index} className={`flex items-start gap-3 ${message.sender === 'user' ? 'flex-row-reverse' : 'flex'}`}>
+                    <div className={`rounded-lg px-4 py-2 max-w-[80%] text-sm`}
+                        style={{
+                            backgroundColor: message.sender === 'bot' ? botMessageColor : primaryColor,
+                            color: getTextColor(message.sender === 'bot' ? botMessageColor : primaryColor),
+                        }}
+                    >
+                        {message.text}
                     </div>
-                ))}
-                 {isResponding && (
-                    <div className="flex items-start gap-3">
-                        <div className="rounded-lg px-4 py-2 max-w-[80%] text-sm flex items-center" style={{backgroundColor: botMessageColor, color: getTextColor(botMessageColor)}}>
-                            <Loader2 className="h-5 w-5 animate-spin"/>
-                        </div>
+                </div>
+            ))}
+             {isResponding && (
+                <div className="flex items-start gap-3">
+                    <div className="rounded-lg px-4 py-2 max-w-[80%] text-sm flex items-center" style={{backgroundColor: botMessageColor, color: getTextColor(botMessageColor)}}>
+                        <Loader2 className="h-5 w-5 animate-spin"/>
                     </div>
-                )}
-            </div>
+                </div>
+            )}
+        </div>
+        <div className="p-4 pt-0 border-t">
             <form onSubmit={handleSendMessage} className="mt-4 flex gap-2">
                 <Input 
                     value={inputValue}
