@@ -56,9 +56,9 @@ export function PublicChatView({ chatbot }: PublicChatViewProps) {
   }, [messages]);
   
   // In a real app, these colors would be part of the chatbot object.
-  const primaryColor = '#6366F1';
-  const backgroundColor = '#111827';
-  const botMessageColor = '#1F2937';
+  const primaryColor = '#3F51B5';
+  const backgroundColor = '#F5F5F5';
+  const botMessageColor = '#FFFFFF';
 
   const handleFeedback = (messageId: string, feedback: 'good' | 'bad') => {
     setMessages(prev => prev.map(msg => {
@@ -126,26 +126,33 @@ export function PublicChatView({ chatbot }: PublicChatViewProps) {
             {messages.map((message) => (
                 <div key={message.id} className={cn('flex items-end gap-3', message.sender === 'user' ? 'flex-row-reverse' : 'flex-row')}>
                     {message.sender === 'bot' && (
-                        <Avatar className="h-8 w-8">
-                             <AvatarImage />
-                            <AvatarFallback style={{backgroundColor: botMessageColor, color: getTextColor(botMessageColor)}}>
+                         <Avatar className="h-8 w-8">
+                            <AvatarImage />
+                            <AvatarFallback className="bg-muted text-muted-foreground">
                                 <Bot className="h-5 w-5" />
                             </AvatarFallback>
                         </Avatar>
                     )}
-                    <div className='flex flex-col gap-1 w-full items-start max-w-[80%]'>
+                     {message.sender === 'user' && (
+                        <Avatar className="h-8 w-8">
+                            <AvatarImage />
+                            <AvatarFallback style={{ backgroundColor: primaryColor, color: getTextColor(primaryColor)}}>
+                                <User className="h-5 w-5" />
+                            </AvatarFallback>
+                        </Avatar>
+                    )}
+                    <div className={cn('flex flex-col gap-1 w-full', message.sender === 'user' ? 'items-end' : 'items-start')}>
                         <div
-                            className={cn('rounded-lg px-4 py-2 text-sm', message.sender === 'user' ? 'rounded-br-none' : 'rounded-bl-none')}
+                            className={cn('rounded-lg px-4 py-2 text-sm max-w-[80%]', message.sender === 'user' ? 'rounded-br-none' : 'rounded-bl-none')}
                             style={{
                                 backgroundColor: message.sender === 'bot' ? botMessageColor : primaryColor,
                                 color: getTextColor(message.sender === 'bot' ? botMessageColor : primaryColor),
-                                alignSelf: message.sender === 'user' ? 'flex-end' : 'flex-start',
                             }}
                         >
                             {message.text}
                         </div>
-                        {message.sender === 'bot' && (
-                            <div className="flex items-center gap-1" style={{ alignSelf: 'flex-start' }}>
+                        {message.sender === 'bot' && message.id !== 'initial' && (
+                            <div className="flex items-center gap-1">
                                 <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleFeedback(message.id, 'good')}>
                                     <ThumbsUp className={cn("h-4 w-4", message.feedback === 'good' ? 'text-primary' : 'text-muted-foreground')} />
                                 </Button>
@@ -161,24 +168,24 @@ export function PublicChatView({ chatbot }: PublicChatViewProps) {
                 <div className="flex items-end gap-3">
                     <Avatar className="h-8 w-8">
                         <AvatarImage />
-                        <AvatarFallback style={{backgroundColor: botMessageColor, color: getTextColor(botMessageColor)}}>
+                        <AvatarFallback className="bg-muted text-muted-foreground">
                             <Bot className="h-5 w-5" />
                         </AvatarFallback>
                     </Avatar>
-                    <div className="rounded-lg px-4 py-2 text-sm rounded-bl-none flex items-center" style={{backgroundColor: botMessageColor, color: getTextColor(botMessageColor)}}>
-                        <Loader2 className="h-5 w-5 animate-spin"/>
+                    <div className="rounded-lg px-4 py-2 text-sm rounded-bl-none flex items-center bg-white">
+                        <Loader2 className="h-5 w-5 animate-spin text-muted-foreground"/>
                     </div>
                 </div>
             )}
         </main>
-        <footer className="p-4 border-t" style={{ backgroundColor, borderColor: botMessageColor }}>
+        <footer className="p-4 border-t bg-background">
             <form onSubmit={handleSendMessage} className="flex gap-2">
                 <Input 
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     placeholder="Type your message..."
                     disabled={isResponding}
-                    className="flex-1 bg-background text-foreground"
+                    className="flex-1"
                 />
                 <Button type="submit" size="icon" disabled={isResponding || !inputValue.trim()} style={{backgroundColor: primaryColor, color: getTextColor(primaryColor)}}>
                     <Send className="h-4 w-4" />
