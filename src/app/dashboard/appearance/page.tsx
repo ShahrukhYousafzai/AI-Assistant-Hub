@@ -10,8 +10,19 @@ import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
 export default function AppearancePage() {
-  const [primaryColor, setPrimaryColor] = useState('#6A3EFE');
-  const [backgroundColor, setBackgroundColor] = useState('#121829');
+  const [primaryColor, setPrimaryColor] = useState('#3F51B5');
+  const [backgroundColor, setBackgroundColor] = useState('#F5F5F5');
+  const [textColor, setTextColor] = useState('#FFFFFF');
+
+  // A simple function to determine if text should be light or dark
+  const getTextColor = (hexcolor: string) => {
+    hexcolor = hexcolor.replace('#', '');
+    const r = parseInt(hexcolor.substring(0, 2), 16);
+    const g = parseInt(hexcolor.substring(2, 4), 16);
+    const b = parseInt(hexcolor.substring(4, 6), 16);
+    const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+    return yiq >= 128 ? '#000000' : '#FFFFFF';
+  };
 
   return (
     <>
@@ -31,29 +42,26 @@ export default function AppearancePage() {
             <div className="space-y-2">
               <Label>Primary Color</Label>
               <div className="relative">
-                <Input value={primaryColor} readOnly />
-                 <div
-                  className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 rounded-md border"
-                  style={{ backgroundColor: primaryColor }}
+                <Input value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} />
+                <input
+                    type="color"
+                    value={primaryColor}
+                    onChange={(e) => setPrimaryColor(e.target.value)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 rounded-md border appearance-none bg-transparent cursor-pointer"
                 />
               </div>
             </div>
              <div className="space-y-2">
               <Label>Background Color</Label>
                <div className="relative">
-                <Input value={backgroundColor} readOnly />
-                 <div
-                  className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 rounded-md border"
-                  style={{ backgroundColor: backgroundColor }}
+                <Input value={backgroundColor} onChange={(e) => setBackgroundColor(e.target.value)} />
+                <input
+                    type="color"
+                    value={backgroundColor}
+                    onChange={(e) => setBackgroundColor(e.target.value)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 rounded-md border appearance-none bg-transparent cursor-pointer"
                 />
               </div>
-            </div>
-             <div className="space-y-2 sm:col-span-2">
-                <Label>Or pick your own...</Label>
-                <div className="p-4 rounded-lg bg-secondary">
-                    {/* In a real scenario, a color picker component would be used here. */}
-                    <p className="text-sm text-muted-foreground">A color picker would allow for full customization.</p>
-                </div>
             </div>
           </CardContent>
         </Card>
@@ -66,8 +74,8 @@ export default function AppearancePage() {
           <CardContent>
             <div className="flex h-64 flex-col rounded-lg border">
                 <div 
-                    className="flex items-center justify-between rounded-t-lg p-3 text-white"
-                    style={{backgroundColor: primaryColor}}
+                    className="flex items-center justify-between rounded-t-lg p-3"
+                    style={{backgroundColor: primaryColor, color: getTextColor(primaryColor)}}
                 >
                     <div className="flex items-center gap-2">
                         <div className="h-8 w-8 rounded-full bg-white/30 flex items-center justify-center">
@@ -80,13 +88,13 @@ export default function AppearancePage() {
                     className="flex-1 p-4 space-y-4"
                     style={{backgroundColor: backgroundColor}}
                 >
-                    <div className="max-w-[75%] rounded-lg bg-secondary p-3 text-sm">
+                    <div className="max-w-[75%] rounded-lg bg-secondary p-3 text-sm text-secondary-foreground">
                         Hello! How can I help you today?
                     </div>
                      <div className="flex justify-end">
                         <div 
-                            className="max-w-[75%] rounded-lg p-3 text-sm text-white"
-                            style={{backgroundColor: primaryColor}}
+                            className="max-w-[75%] rounded-lg p-3 text-sm"
+                            style={{backgroundColor: primaryColor, color: getTextColor(primaryColor)}}
                         >
                             I have a question about pricing.
                         </div>
@@ -118,7 +126,7 @@ export default function AppearancePage() {
         </Card>
       </div>
        <div className="mt-8 flex justify-end">
-        <Button size="lg" className="bg-primary hover:bg-primary/90">Save Changes</Button>
+        <Button size="lg">Save Changes</Button>
       </div>
     </>
   );
