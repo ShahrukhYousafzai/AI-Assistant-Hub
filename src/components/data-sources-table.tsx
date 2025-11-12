@@ -20,6 +20,18 @@ import type { DataSource } from '@/lib/types';
 import { format, parseISO } from 'date-fns';
 import { MoreHorizontal, FileText, Globe, Trash2, Pencil } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useState, useEffect } from 'react';
+
+const ClientOnly = ({ children }: { children: React.ReactNode }) => {
+  const [hasMounted, setHasMounted] = useState(false);
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+  if (!hasMounted) {
+    return null;
+  }
+  return <>{children}</>;
+};
 
 type DataSourcesTableProps = {
   dataSources: DataSource[];
@@ -72,7 +84,11 @@ export function DataSourcesTable({ dataSources }: DataSourcesTableProps) {
                   {source.status}
                 </Badge>
               </TableCell>
-              <TableCell>{format(parseISO(source.lastUpdatedAt), 'PPp')}</TableCell>
+              <TableCell>
+                <ClientOnly>
+                  {format(parseISO(source.lastUpdatedAt), 'PPp')}
+                </ClientOnly>
+              </TableCell>
               <TableCell className="text-right">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
