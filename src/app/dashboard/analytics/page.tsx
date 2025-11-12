@@ -1,11 +1,12 @@
 'use client';
 
 import { PageHeader } from '@/components/page-header';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from 'recharts';
-import { mockChatbots } from '@/lib/mock-data';
+import { mockChatbots, mockKnowledgeGaps } from '@/lib/mock-data';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useState } from 'react';
+import { KnowledgeGapsTable } from '@/components/knowledge-gaps-table';
 
 const monthlyData = [
   { month: 'Jan', conversations: 4000 },
@@ -92,6 +93,18 @@ export default function AnalyticsPage() {
                     </BarChart>
                 </ResponsiveContainer>
             </CardContent>
+        </Card>
+
+        <Card className="md:col-span-2 lg:col-span-3">
+          <CardHeader>
+            <CardTitle>Knowledge Gaps Report</CardTitle>
+            <CardDescription>
+              Questions your chatbots failed to answer, based on user feedback.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <KnowledgeGapsTable knowledgeGaps={mockKnowledgeGaps} chatbots={mockChatbots} />
+          </CardContent>
         </Card>
       </div>
     </>

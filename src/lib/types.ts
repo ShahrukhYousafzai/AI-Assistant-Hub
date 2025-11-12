@@ -14,3 +14,11 @@ export type DataSource = {
   status: 'Ready' | 'Processing';
   lastUpdatedAt: string;
 };
+
+export type KnowledgeGap = {
+  id: string;
+  chatbotId: string;
+  question: string;
+  response: string;
+  timestamp: string;
+};
