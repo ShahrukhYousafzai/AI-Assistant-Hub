@@ -21,7 +21,7 @@ import { PageHeader } from '@/components/page-header';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { mockChatbots, mockDataSources } from '@/lib/mock-data';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft, Bot, MessageSquare, Globe } from 'lucide-react';
+import { ArrowLeft, Bot, MessageSquare } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { TestChatbotDialog } from '@/components/test-chatbot-dialog';
 import type { Chatbot } from '@/lib/types';
@@ -43,6 +43,7 @@ const editChatbotFormSchema = z.object({
   backgroundColor: z.string(),
   botMessageColor: z.string(),
   multilingual: z.boolean(),
+  suggestionBubbles: z.boolean(),
 });
 
 // A simple function to determine if text should be light or dark
@@ -77,6 +78,7 @@ export default function EditChatbotPage() {
       backgroundColor: '#111827',
       botMessageColor: '#1F2937',
       multilingual: false,
+      suggestionBubbles: false,
     },
   });
 
@@ -95,6 +97,7 @@ export default function EditChatbotPage() {
         backgroundColor: '#111827',
         botMessageColor: '#1F2937',
         multilingual: chatbot.multilingual,
+        suggestionBubbles: chatbot.suggestionBubbles,
       });
     }
   }, [chatbot, form]);
@@ -260,6 +263,28 @@ export default function EditChatbotPage() {
                               <FormDescription>
                                 Automatically detect user language and translate
                                 responses.
+                              </FormDescription>
+                            </div>
+                            <FormControl>
+                              <Switch
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="suggestionBubbles"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                            <div className="space-y-0.5">
+                              <FormLabel className="text-base">
+                                Suggestion Bubbles
+                              </FormLabel>
+                              <FormDescription>
+                                Show AI-generated quick replies after the bot responds.
                               </FormDescription>
                             </div>
                             <FormControl>

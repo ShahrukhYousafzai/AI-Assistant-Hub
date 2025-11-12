@@ -24,6 +24,7 @@ type Message = {
     sender: 'user' | 'bot';
     text: string;
     feedback?: 'good' | 'bad' | null;
+    suggestions?: string[];
 }
 
 // A simple function to determine if text should be light or dark
@@ -45,6 +46,7 @@ export function TestChatbotDialog({ chatbot, isOpen, onOpenChange }: TestChatbot
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isResponding, setIsResponding] = useState(false);
+  const [activeSuggestions, setActiveSuggestions] = useState<string[]>([]);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -53,6 +55,7 @@ export function TestChatbotDialog({ chatbot, isOpen, onOpenChange }: TestChatbot
             { id: 'initial', sender: 'bot', text: `Hello! I'm a preview of ${chatbot.name}. Ask me anything!`}
         ]);
         setInputValue('');
+        setActiveSuggestions([]);
     }
   }, [isOpen, chatbot]);
 
@@ -82,34 +85,39 @@ export function TestChatbotDialog({ chatbot, isOpen, onOpenChange }: TestChatbot
     console.log(`Feedback for message ${messageId}: ${feedback}`);
   };
 
+  const submitMessage = async (messageText: string) => {
+    if (!messageText.trim() || isResponding) return;
 
-  const handleSendMessage = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inputValue.trim() || isResponding) return;
-
-    const userMessage: Message = { id: crypto.randomUUID(), sender: 'user', text: inputValue };
+    const userMessage: Message = { id: crypto.randomUUID(), sender: 'user', text: messageText };
     setMessages(prev => [...prev, userMessage]);
-    setInputValue('');
+    setActiveSuggestions([]);
     setIsResponding(true);
 
     try {
-      // Find the full persona text
-      const persona = `This bot is based on ${chatbot.name}.`; // This would be fetched in a real app
-      
-      // Get attached knowledge source names
+      const persona = `This bot is based on ${chatbot.name}.`;
       const attachedSources = mockDataSources
         .filter(ds => chatbot.knowledgeSources.includes(ds.id))
         .map(ds => ds.name);
 
       const response = await generateChatResponse({
-        message: inputValue,
+        message: messageText,
         persona: persona,
         knowledgeSourceNames: attachedSources,
         enableTranslation: chatbot.multilingual,
+        enableSuggestions: chatbot.suggestionBubbles,
       });
 
-      const botResponse: Message = { id: crypto.randomUUID(), sender: 'bot', text: response.response, feedback: null };
+      const botResponse: Message = { 
+        id: crypto.randomUUID(), 
+        sender: 'bot', 
+        text: response.response, 
+        feedback: null,
+        suggestions: response.suggestions
+      };
       setMessages(prev => [...prev, botResponse]);
+      if (response.suggestions) {
+        setActiveSuggestions(response.suggestions);
+      }
 
     } catch (error) {
       console.error("Failed to get chat response:", error);
@@ -118,6 +126,16 @@ export function TestChatbotDialog({ chatbot, isOpen, onOpenChange }: TestChatbot
     } finally {
         setIsResponding(false);
     }
+  }
+
+  const handleSendMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+    submitMessage(inputValue);
+    setInputValue('');
+  }
+
+  const handleSuggestionClick = (suggestion: string) => {
+    submitMessage(suggestion);
   }
 
   return (
@@ -173,6 +191,21 @@ export function TestChatbotDialog({ chatbot, isOpen, onOpenChange }: TestChatbot
             )}
         </div>
         <div className="p-4 border-t" style={{backgroundColor: backgroundColor, borderColor: botMessageColor}}>
+            {activeSuggestions.length > 0 && (
+                <div className="flex flex-wrap gap-2 mb-3">
+                    {activeSuggestions.map((suggestion, index) => (
+                        <Button
+                            key={index}
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleSuggestionClick(suggestion)}
+                            className="bg-gray-700 border-gray-600 text-white hover:bg-gray-600"
+                        >
+                            {suggestion}
+                        </Button>
+                    ))}
+                </div>
+            )}
             <form onSubmit={handleSendMessage} className="flex gap-2">
                 <Input 
                     value={inputValue}

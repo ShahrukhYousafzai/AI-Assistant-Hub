@@ -37,6 +37,7 @@ const newChatbotFormSchema = z.object({
       message: 'You have to select at least one knowledge source.',
     }),
   multilingual: z.boolean(),
+  suggestionBubbles: z.boolean(),
 });
 
 export default function NewChatbotPage() {
@@ -50,6 +51,7 @@ export default function NewChatbotPage() {
       persona: '',
       knowledgeSourceIds: [],
       multilingual: false,
+      suggestionBubbles: true,
     },
   });
 
@@ -197,6 +199,28 @@ export default function NewChatbotPage() {
                         <FormDescription>
                           Automatically detect user language and translate
                           responses.
+                        </FormDescription>
+                      </div>
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                 <FormField
+                  control={form.control}
+                  name="suggestionBubbles"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                      <div className="space-y-0.5">
+                        <FormLabel className="text-base">
+                          Suggestion Bubbles
+                        </FormLabel>
+                        <FormDescription>
+                          Show AI-generated quick replies after the bot responds.
                         </FormDescription>
                       </div>
                       <FormControl>

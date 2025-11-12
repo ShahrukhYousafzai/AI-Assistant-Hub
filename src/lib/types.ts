@@ -6,6 +6,7 @@ export type Chatbot = {
   monthlyConversations: number;
   knowledgeSources: string[]; // Array of DataSource IDs
   multilingual: boolean;
+  suggestionBubbles: boolean;
 };
 
 export type DataSource = {

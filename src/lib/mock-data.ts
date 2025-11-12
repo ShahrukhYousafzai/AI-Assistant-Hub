@@ -54,6 +54,7 @@ export const mockChatbots: Chatbot[] = [
     monthlyConversations: 1254,
     knowledgeSources: ['ds_2', 'ds_5'],
     multilingual: true,
+    suggestionBubbles: true,
   },
   {
     id: 'bot_2',
@@ -63,6 +64,7 @@ export const mockChatbots: Chatbot[] = [
     monthlyConversations: 321,
     knowledgeSources: ['ds_3'],
     multilingual: false,
+    suggestionBubbles: false,
   },
   {
     id: 'bot_3',
@@ -72,6 +74,7 @@ export const mockChatbots: Chatbot[] = [
     monthlyConversations: 0,
     knowledgeSources: ['ds_1', 'ds_2', 'ds_6'],
     multilingual: false,
+    suggestionBubbles: true,
   },
   {
     id: 'bot_4',
@@ -81,6 +84,7 @@ export const mockChatbots: Chatbot[] = [
     monthlyConversations: 890,
     knowledgeSources: ['ds_4'],
     multilingual: true,
+    suggestionBubbles: false,
   },
 ];
 

@@ -16,11 +16,13 @@ const ChatResponseInputSchema = z.object({
   persona: z.string().describe('The personality and rules for the chatbot.'),
   knowledgeSourceNames: z.array(z.string()).describe('The names of the knowledge sources the chatbot can access.'),
   enableTranslation: z.boolean().optional().describe('Whether to enable auto-translation of the response.'),
+  enableSuggestions: z.boolean().optional().describe('Whether to generate quick suggestion bubbles.'),
 });
 export type ChatResponseInput = z.infer<typeof ChatResponseInputSchema>;
 
 const ChatResponseOutputSchema = z.object({
   response: z.string().describe('The AI-generated response to the user.'),
+  suggestions: z.array(z.string()).optional().describe('A list of 3-4 short, relevant follow-up questions or topics the user might be interested in.'),
 });
 export type ChatResponseOutput = z.infer<typeof ChatResponseOutputSchema>;
 
@@ -47,6 +49,13 @@ const prompt = ai.definePrompt({
   - Detect the language of the user's message.
   - Your final response MUST be in the same language as the user's message.
   - You must still use the English-based knowledge sources provided. Translate the information accurately to the user's language.
+  {{/if}}
+
+  {{#if enableSuggestions}}
+  **Suggestion Bubbles**
+  - After your main response, you MUST provide 3 to 4 short, relevant suggestions for follow-up questions or topics.
+  - These suggestions should be concise (a few words) and directly related to the user's query and your response.
+  - The suggestions should be in the same language as your main response.
   {{/if}}
 
   **User's Message**
