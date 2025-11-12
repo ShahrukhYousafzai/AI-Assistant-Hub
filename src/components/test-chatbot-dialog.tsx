@@ -26,6 +26,21 @@ type Message = {
     text: string;
 }
 
+// A simple function to determine if text should be light or dark
+const getTextColor = (hexcolor: string) => {
+    if (!hexcolor) return '#000000';
+    hexcolor = hexcolor.replace('#', '');
+    if (hexcolor.length === 3) {
+        hexcolor = hexcolor.split('').map(char => char + char).join('');
+    }
+    const r = parseInt(hexcolor.substring(0, 2), 16);
+    const g = parseInt(hexcolor.substring(2, 4), 16);
+    const b = parseInt(hexcolor.substring(4, 6), 16);
+    const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+    return yiq >= 128 ? '#000000' : '#FFFFFF';
+};
+
+
 export function TestChatbotDialog({ chatbot, isOpen, onOpenChange }: TestChatbotDialogProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
@@ -49,6 +64,13 @@ export function TestChatbotDialog({ chatbot, isOpen, onOpenChange }: TestChatbot
   }, [messages]);
 
   if (!chatbot) return null;
+  
+  // In a real app, these colors would be part of the chatbot object.
+  // For now, we'll use some defaults if they're not on the mock object.
+  const primaryColor = '#3F51B5';
+  const backgroundColor = '#F5F5F5';
+  const botMessageColor = '#E0E0E0';
+
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -88,42 +110,39 @@ export function TestChatbotDialog({ chatbot, isOpen, onOpenChange }: TestChatbot
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg">
-        <DialogHeader>
-          <DialogTitle>Test: "{chatbot.name}"</DialogTitle>
-          <DialogDescription>
-            Interact with your chatbot below to see how it responds. This is a sandboxed preview.
-          </DialogDescription>
-        </DialogHeader>
-        <div className="flex flex-col h-[60vh]">
-            <div ref={chatContainerRef} className="flex-1 space-y-4 overflow-y-auto rounded-lg border p-4 bg-secondary">
+      <DialogContent className="sm:max-w-md p-0">
+        <div 
+            className="flex items-center justify-between rounded-t-lg p-3"
+            style={{backgroundColor: primaryColor, color: getTextColor(primaryColor)}}
+        >
+            <div className="flex items-center gap-2">
+                <div className="h-8 w-8 rounded-full bg-white/30 flex items-center justify-center">
+                    <Bot className="h-5 w-5" />
+                </div>
+                <p className="font-semibold">{chatbot.name}</p>
+            </div>
+        </div>
+        <div className="flex flex-col h-[50vh] p-4 pt-0">
+            <div 
+                ref={chatContainerRef} 
+                className="flex-1 space-y-4 overflow-y-auto rounded-b-lg p-4 -mx-4"
+                style={{backgroundColor: backgroundColor}}
+            >
                 {messages.map((message, index) => (
-                    <div key={index} className={`flex items-start gap-3 ${message.sender === 'user' ? 'justify-end' : ''}`}>
-                        {message.sender === 'bot' && (
-                            <div className="p-2 rounded-full bg-primary text-primary-foreground">
-                                <Bot className="h-5 w-5" />
-                            </div>
-                        )}
-                        <div className={`rounded-lg px-4 py-2 max-w-[80%] text-sm ${
-                            message.sender === 'bot' 
-                                ? 'bg-background text-foreground'
-                                : 'bg-primary text-primary-foreground'
-                        }`}>
+                    <div key={index} className={`flex items-start gap-3 ${message.sender === 'user' ? 'flex-row-reverse' : ''}`}>
+                        <div className={`rounded-lg px-4 py-2 max-w-[80%] text-sm`}
+                            style={{
+                                backgroundColor: message.sender === 'bot' ? botMessageColor : primaryColor,
+                                color: getTextColor(message.sender === 'bot' ? botMessageColor : primaryColor),
+                            }}
+                        >
                             {message.text}
                         </div>
-                         {message.sender === 'user' && (
-                            <div className="p-2 rounded-full bg-muted text-muted-foreground border">
-                                <User className="h-5 w-5" />
-                            </div>
-                        )}
                     </div>
                 ))}
                  {isResponding && (
                     <div className="flex items-start gap-3">
-                        <div className="p-2 rounded-full bg-primary text-primary-foreground">
-                            <Bot className="h-5 w-5" />
-                        </div>
-                        <div className="rounded-lg px-4 py-2 max-w-[80%] text-sm bg-background text-foreground flex items-center">
+                        <div className="rounded-lg px-4 py-2 max-w-[80%] text-sm flex items-center" style={{backgroundColor: botMessageColor, color: getTextColor(botMessageColor)}}>
                             <Loader2 className="h-5 w-5 animate-spin"/>
                         </div>
                     </div>
