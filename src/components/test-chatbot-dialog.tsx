@@ -69,10 +69,9 @@ export function TestChatbotDialog({ chatbot, isOpen, onOpenChange }: TestChatbot
   if (!chatbot) return null;
   
   // In a real app, these colors would be part of the chatbot object.
-  // For now, we'll use some defaults if they're not on the mock object.
-  const primaryColor = '#3F51B5';
-  const backgroundColor = '#F5F5F5';
-  const botMessageColor = '#E0E0E0';
+  const primaryColor = '#6366F1';
+  const backgroundColor = '#111827';
+  const botMessageColor = '#1F2937';
 
   const handleFeedback = (messageId: string, feedback: 'good' | 'bad') => {
     setMessages(prev => prev.map(msg => {
@@ -125,42 +124,40 @@ export function TestChatbotDialog({ chatbot, isOpen, onOpenChange }: TestChatbot
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md p-0 flex flex-col h-[60vh]">
+      <DialogContent className="sm:max-w-md p-0 flex flex-col h-[70vh] max-h-[600px]">
         <div 
-            className="flex items-center justify-between p-3 flex-shrink-0"
+            className="flex items-center justify-between p-4 flex-shrink-0"
             style={{backgroundColor: primaryColor, color: getTextColor(primaryColor)}}
         >
-            <div className="flex items-center gap-2">
-                <div className="h-8 w-8 rounded-full bg-white/30 flex items-center justify-center">
+            <div className="flex items-center gap-3">
+                <div className="h-9 w-9 rounded-full bg-white/20 flex items-center justify-center">
                     <Bot className="h-5 w-5" />
                 </div>
-                <p className="font-semibold">{chatbot.name}</p>
+                <p className="font-semibold text-lg">{chatbot.name}</p>
             </div>
         </div>
         <div 
             ref={chatContainerRef} 
-            className="flex-1 space-y-4 overflow-y-auto p-4"
+            className="flex-1 space-y-6 overflow-y-auto p-4"
             style={{backgroundColor: backgroundColor}}
         >
-            {messages.map((message, index) => (
-                <div key={index} className={`flex items-start gap-3 ${message.sender === 'user' ? 'flex-row-reverse' : 'flex-col'}`}>
-                     <div className={`flex items-start gap-3 ${message.sender === 'user' ? 'flex-row-reverse' : ''}`}>
-                        <div className={`rounded-lg px-4 py-2 max-w-[80%] text-sm`}
-                            style={{
-                                backgroundColor: message.sender === 'bot' ? botMessageColor : primaryColor,
-                                color: getTextColor(message.sender === 'bot' ? botMessageColor : primaryColor),
-                            }}
-                        >
-                            {message.text}
-                        </div>
+            {messages.map((message) => (
+                <div key={message.id} className={cn('flex items-end gap-3', message.sender === 'user' ? 'flex-row-reverse' : 'flex-row')}>
+                    <div className={cn('rounded-lg px-4 py-2 text-sm max-w-[80%]', message.sender === 'user' ? 'rounded-br-none' : 'rounded-bl-none')}
+                        style={{
+                            backgroundColor: message.sender === 'bot' ? botMessageColor : primaryColor,
+                            color: getTextColor(message.sender === 'bot' ? botMessageColor : primaryColor),
+                        }}
+                    >
+                        {message.text}
                     </div>
-                    {message.sender === 'bot' && (
-                        <div className="flex items-center gap-2 mt-1 ml-2">
-                            <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => handleFeedback(message.id, 'good')}>
-                                <ThumbsUp className={cn("h-4 w-4", message.feedback === 'good' ? 'text-primary' : 'text-muted-foreground')} />
+                    {message.sender === 'bot' && message.id !== 'initial' && (
+                        <div className="flex items-center self-end">
+                            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleFeedback(message.id, 'good')}>
+                                <ThumbsUp className={cn("h-4 w-4", message.feedback === 'good' ? 'text-indigo-400' : 'text-gray-400')} />
                             </Button>
-                            <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => handleFeedback(message.id, 'bad')}>
-                                <ThumbsDown className={cn("h-4 w-4", message.feedback === 'bad' ? 'text-destructive' : 'text-muted-foreground')} />
+                            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleFeedback(message.id, 'bad')}>
+                                <ThumbsDown className={cn("h-4 w-4", message.feedback === 'bad' ? 'text-red-400' : 'text-gray-400')} />
                             </Button>
                         </div>
                     )}
@@ -174,15 +171,16 @@ export function TestChatbotDialog({ chatbot, isOpen, onOpenChange }: TestChatbot
                 </div>
             )}
         </div>
-        <div className="p-4 pt-0 border-t">
-            <form onSubmit={handleSendMessage} className="mt-4 flex gap-2">
+        <div className="p-4 border-t" style={{borderColor: botMessageColor}}>
+            <form onSubmit={handleSendMessage} className="flex gap-2">
                 <Input 
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     placeholder="Type your message..."
                     disabled={isResponding}
+                    className="flex-1 bg-gray-700 border-gray-600 text-white placeholder-gray-400"
                 />
-                <Button type="submit" size="icon" disabled={isResponding}>
+                <Button type="submit" size="icon" disabled={isResponding || !inputValue.trim()} style={{backgroundColor: primaryColor, color: getTextColor(primaryColor)}}>
                     <Send className="h-4 w-4" />
                 </Button>
             </form>

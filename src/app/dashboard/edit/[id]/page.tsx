@@ -71,15 +71,15 @@ export default function EditChatbotPage() {
       name: '',
       persona: 'This bot is friendly and helpful.', // Default persona
       knowledgeSourceIds: [],
-      primaryColor: '#3F51B5',
-      backgroundColor: '#F5F5F5',
-      botMessageColor: '#E0E0E0',
+      primaryColor: '#6366F1',
+      backgroundColor: '#111827',
+      botMessageColor: '#1F2937',
     },
   });
 
-  const watchPrimaryColor = form.watch('primaryColor', '#3F51B5');
-  const watchBackgroundColor = form.watch('backgroundColor', '#F5F5F5');
-  const watchBotMessageColor = form.watch('botMessageColor', '#E0E0E0');
+  const watchPrimaryColor = form.watch('primaryColor', '#6366F1');
+  const watchBackgroundColor = form.watch('backgroundColor', '#111827');
+  const watchBotMessageColor = form.watch('botMessageColor', '#1F2937');
   
   useEffect(() => {
     if (chatbot) {
@@ -88,9 +88,9 @@ export default function EditChatbotPage() {
         // A real implementation would fetch the full persona text
         persona: `This bot is based on ${chatbot.name}.`,
         knowledgeSourceIds: chatbot.knowledgeSources,
-        primaryColor: '#3F51B5',
-        backgroundColor: '#F5F5F5',
-        botMessageColor: '#E0E0E0',
+        primaryColor: '#6366F1',
+        backgroundColor: '#111827',
+        botMessageColor: '#1F2937',
       });
     }
   }, [chatbot, form]);

@@ -56,10 +56,9 @@ export function PublicChatView({ chatbot }: PublicChatViewProps) {
   }, [messages]);
   
   // In a real app, these colors would be part of the chatbot object.
-  // For now, we'll use some defaults if they're not on the mock object.
-  const primaryColor = '#3F51B5';
-  const backgroundColor = '#F5F5F5';
-  const botMessageColor = '#E0E0E0';
+  const primaryColor = '#6366F1';
+  const backgroundColor = '#111827';
+  const botMessageColor = '#1F2937';
 
   const handleFeedback = (messageId: string, feedback: 'good' | 'bad') => {
     setMessages(prev => prev.map(msg => {
@@ -172,7 +171,7 @@ export function PublicChatView({ chatbot }: PublicChatViewProps) {
                 </div>
             )}
         </main>
-        <footer className="p-4 border-t" style={{ backgroundColor }}>
+        <footer className="p-4 border-t" style={{ backgroundColor, borderColor: botMessageColor }}>
             <form onSubmit={handleSendMessage} className="flex gap-2">
                 <Input 
                     value={inputValue}
