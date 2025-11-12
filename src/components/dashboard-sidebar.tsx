@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/sidebar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { Bot, Database, LogOut, Settings, Sun, Moon, LifeBuoy, Palette, Share2, BarChart2 } from 'lucide-react';
+import { Bot, Database, LogOut, Settings, Sun, Moon, LifeBuoy, Share2, BarChart2 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
@@ -61,18 +61,6 @@ export function DashboardSidebar() {
               <Link href="/dashboard/data-sources">
                 <Database />
                 <span>Data Sources</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-           <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              isActive={pathname === '/dashboard/appearance'}
-              tooltip="Appearance & Branding"
-            >
-              <Link href="/dashboard/appearance">
-                <Palette />
-                <span>Appearance</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
