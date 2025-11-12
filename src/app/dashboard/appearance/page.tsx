@@ -12,7 +12,7 @@ import { cn } from '@/lib/utils';
 export default function AppearancePage() {
   const [primaryColor, setPrimaryColor] = useState('#3F51B5');
   const [backgroundColor, setBackgroundColor] = useState('#F5F5F5');
-  const [textColor, setTextColor] = useState('#FFFFFF');
+  const [botMessageColor, setBotMessageColor] = useState('#E0E0E0');
 
   // A simple function to determine if text should be light or dark
   const getTextColor = (hexcolor: string) => {
@@ -38,7 +38,7 @@ export default function AppearancePage() {
               Pick colors that align with your brand identity. The changes will be reflected in the preview.
             </CardDescription>
           </CardHeader>
-          <CardContent className="grid gap-6 sm:grid-cols-2">
+          <CardContent className="grid gap-6 sm:grid-cols-3">
             <div className="space-y-2">
               <Label>Primary Color</Label>
               <div className="relative">
@@ -59,6 +59,18 @@ export default function AppearancePage() {
                     type="color"
                     value={backgroundColor}
                     onChange={(e) => setBackgroundColor(e.target.value)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 rounded-md border appearance-none bg-transparent cursor-pointer"
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label>Bot Message Color</Label>
+               <div className="relative">
+                <Input value={botMessageColor} onChange={(e) => setBotMessageColor(e.target.value)} />
+                <input
+                    type="color"
+                    value={botMessageColor}
+                    onChange={(e) => setBotMessageColor(e.target.value)}
                     className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 rounded-md border appearance-none bg-transparent cursor-pointer"
                 />
               </div>
@@ -88,7 +100,10 @@ export default function AppearancePage() {
                     className="flex-1 p-4 space-y-4"
                     style={{backgroundColor: backgroundColor}}
                 >
-                    <div className="max-w-[75%] rounded-lg bg-secondary p-3 text-sm text-secondary-foreground">
+                    <div 
+                      className="max-w-[75%] rounded-lg p-3 text-sm"
+                      style={{backgroundColor: botMessageColor, color: getTextColor(botMessageColor)}}
+                    >
                         Hello! How can I help you today?
                     </div>
                      <div className="flex justify-end">
