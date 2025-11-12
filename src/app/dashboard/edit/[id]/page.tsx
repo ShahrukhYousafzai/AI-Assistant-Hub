@@ -125,16 +125,10 @@ export default function EditChatbotPage() {
         title={`Edit "${chatbot.name}"`}
         description="Modify your AI assistant's configuration and appearance."
         action={
-          <div className="flex items-center gap-2">
-            <Button variant="outline" onClick={handleTestClick}>
-              <MessageSquare className="mr-2 h-4 w-4" />
-              Test
-            </Button>
-            <Button variant="outline" onClick={() => router.back()}>
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back
-            </Button>
-          </div>
+          <Button variant="outline" onClick={() => router.back()}>
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back
+          </Button>
         }
       />
       <Form {...form}>
@@ -349,7 +343,11 @@ export default function EditChatbotPage() {
             </div>
           </div>
 
-          <div className="flex justify-end">
+          <div className="flex justify-end gap-4">
+            <Button variant="outline" size="lg" type="button" onClick={handleTestClick}>
+                <MessageSquare className="mr-2 h-4 w-4" />
+                Test Chatbot
+            </Button>
             <Button type="submit" size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">Save Changes</Button>
           </div>
         </form>
