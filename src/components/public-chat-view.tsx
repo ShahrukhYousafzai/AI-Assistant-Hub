@@ -56,9 +56,9 @@ export function PublicChatView({ chatbot }: PublicChatViewProps) {
   }, [messages]);
   
   // In a real app, these colors would be part of the chatbot object.
-  const primaryColor = '#3F51B5';
-  const backgroundColor = '#F5F5F5';
-  const botMessageColor = '#FFFFFF';
+  const primaryColor = '#6366F1';
+  const backgroundColor = '#111827';
+  const botMessageColor = '#1F2937';
 
   const handleFeedback = (messageId: string, feedback: 'good' | 'bad') => {
     setMessages(prev => prev.map(msg => {
@@ -172,20 +172,20 @@ export function PublicChatView({ chatbot }: PublicChatViewProps) {
                             <Bot className="h-5 w-5" />
                         </AvatarFallback>
                     </Avatar>
-                    <div className="rounded-lg px-4 py-2 text-sm rounded-bl-none flex items-center bg-white">
+                    <div className="rounded-lg px-4 py-2 text-sm rounded-bl-none flex items-center" style={{backgroundColor: botMessageColor, color: getTextColor(botMessageColor)}}>
                         <Loader2 className="h-5 w-5 animate-spin text-muted-foreground"/>
                     </div>
                 </div>
             )}
         </main>
-        <footer className="p-4 border-t bg-background">
+        <footer className="p-4 border-t" style={{backgroundColor: backgroundColor, borderColor: botMessageColor}}>
             <form onSubmit={handleSendMessage} className="flex gap-2">
                 <Input 
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     placeholder="Type your message..."
                     disabled={isResponding}
-                    className="flex-1"
+                    className="flex-1 bg-gray-700 border-gray-600 text-white placeholder-gray-400"
                 />
                 <Button type="submit" size="icon" disabled={isResponding || !inputValue.trim()} style={{backgroundColor: primaryColor, color: getTextColor(primaryColor)}}>
                     <Send className="h-4 w-4" />

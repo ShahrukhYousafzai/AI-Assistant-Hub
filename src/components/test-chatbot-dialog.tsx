@@ -3,9 +3,6 @@
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -143,24 +140,27 @@ export function TestChatbotDialog({ chatbot, isOpen, onOpenChange }: TestChatbot
         >
             {messages.map((message) => (
                 <div key={message.id} className={cn('flex items-end gap-3', message.sender === 'user' ? 'flex-row-reverse' : 'flex-row')}>
-                    <div className={cn('rounded-lg px-4 py-2 text-sm max-w-[80%]', message.sender === 'user' ? 'rounded-br-none' : 'rounded-bl-none')}
-                        style={{
-                            backgroundColor: message.sender === 'bot' ? botMessageColor : primaryColor,
-                            color: getTextColor(message.sender === 'bot' ? botMessageColor : primaryColor),
-                        }}
-                    >
-                        {message.text}
-                    </div>
-                    {message.sender === 'bot' && message.id !== 'initial' && (
-                        <div className="flex items-center self-end">
-                            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleFeedback(message.id, 'good')}>
-                                <ThumbsUp className={cn("h-4 w-4", message.feedback === 'good' ? 'text-indigo-400' : 'text-gray-400')} />
-                            </Button>
-                            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleFeedback(message.id, 'bad')}>
-                                <ThumbsDown className={cn("h-4 w-4", message.feedback === 'bad' ? 'text-red-400' : 'text-gray-400')} />
-                            </Button>
+                    <div className={cn('flex flex-col gap-1 w-full', message.sender === 'user' ? 'items-end' : 'items-start')}>
+                        <div
+                            className={cn('rounded-lg px-4 py-2 text-sm max-w-[80%]', message.sender === 'user' ? 'rounded-br-none' : 'rounded-bl-none')}
+                            style={{
+                                backgroundColor: message.sender === 'bot' ? botMessageColor : primaryColor,
+                                color: getTextColor(message.sender === 'bot' ? botMessageColor : primaryColor),
+                            }}
+                        >
+                            {message.text}
                         </div>
-                    )}
+                        {message.sender === 'bot' && message.id !== 'initial' && (
+                            <div className="flex items-center self-start">
+                                <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleFeedback(message.id, 'good')}>
+                                    <ThumbsUp className={cn("h-4 w-4", message.feedback === 'good' ? 'text-indigo-400' : 'text-gray-400')} />
+                                </Button>
+                                <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleFeedback(message.id, 'bad')}>
+                                    <ThumbsDown className={cn("h-4 w-4", message.feedback === 'bad' ? 'text-red-400' : 'text-gray-400')} />
+                                </Button>
+                            </div>
+                        )}
+                    </div>
                 </div>
             ))}
              {isResponding && (
@@ -171,7 +171,7 @@ export function TestChatbotDialog({ chatbot, isOpen, onOpenChange }: TestChatbot
                 </div>
             )}
         </div>
-        <div className="p-4 border-t" style={{borderColor: botMessageColor}}>
+        <div className="p-4 border-t" style={{backgroundColor: backgroundColor, borderColor: botMessageColor}}>
             <form onSubmit={handleSendMessage} className="flex gap-2">
                 <Input 
                     value={inputValue}
