@@ -18,12 +18,25 @@ import {
 import { Button } from '@/components/ui/button';
 import type { DataSource } from '@/lib/types';
 import { format, parseISO } from 'date-fns';
-import { MoreHorizontal, FileText, Globe, Trash2 } from 'lucide-react';
+import { MoreHorizontal, FileText, Globe, Trash2, Pencil } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 type DataSourcesTableProps = {
   dataSources: DataSource[];
 };
+
+const TypeIcon = ({ type }: { type: DataSource['type'] }) => {
+  if (type === 'document') {
+    return <FileText className="h-4 w-4 text-muted-foreground" />;
+  }
+  if (type === 'website') {
+    return <Globe className="h-4 w-4 text-muted-foreground" />;
+  }
+  if (type === 'text') {
+    return <Pencil className="h-4 w-4 text-muted-foreground" />;
+  }
+  return null;
+}
 
 export function DataSourcesTable({ dataSources }: DataSourcesTableProps) {
   return (
@@ -44,11 +57,7 @@ export function DataSourcesTable({ dataSources }: DataSourcesTableProps) {
               <TableCell className="font-medium">{source.name}</TableCell>
               <TableCell>
                 <div className="flex items-center gap-2">
-                  {source.type === 'document' ? (
-                    <FileText className="h-4 w-4 text-muted-foreground" />
-                  ) : (
-                    <Globe className="h-4 w-4 text-muted-foreground" />
-                  )}
+                  <TypeIcon type={source.type} />
                   <span className="capitalize">{source.type}</span>
                 </div>
               </TableCell>

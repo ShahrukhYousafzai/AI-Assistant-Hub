@@ -15,9 +15,9 @@ const AIDataProcessingInputSchema = z.object({
   dataUri: z
     .string()
     .describe(
-      "The data URI of the document or website content to process. Must include a MIME type and use Base64 encoding for documents. Expected format: 'data:<mimetype>;base64,<encoded_data>' or a direct URL for websites."
+      "The data URI of the document, website content, or raw text to process. Must include a MIME type and use Base64 encoding for documents. Expected format: 'data:<mimetype>;base64,<encoded_data>', a direct URL for websites, or raw text for text sources."
     ),
-  dataType: z.enum(['document', 'website']).describe('The type of data being processed.'),
+  dataType: z.enum(['document', 'website', 'text']).describe('The type of data being processed.'),
 });
 export type AIDataProcessingInput = z.infer<typeof AIDataProcessingInputSchema>;
 
@@ -35,7 +35,7 @@ const aiDataProcessingPrompt = ai.definePrompt({
   name: 'aiDataProcessingPrompt',
   input: {schema: AIDataProcessingInputSchema},
   output: {schema: AIDataProcessingOutputSchema},
-  prompt: `You are an AI data processor that analyzes documents or websites and generates tags and summaries.
+  prompt: `You are an AI data processor that analyzes documents, websites, or raw text and generates tags and summaries.
 
   Analyze the following {{{dataType}}} content and provide a list of relevant tags and a concise summary.
 
@@ -53,6 +53,8 @@ const aiDataProcessingPrompt = ai.definePrompt({
 });
 
 ai.registerHelper('ifEquals', function(arg1, arg2, options) {
+  // A simple Handlebars helper to check for equality.
+  // The 'document' type requires the 'media' helper, others do not.
   return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
 });
 

@@ -11,7 +11,7 @@ export type Chatbot = {
 export type DataSource = {
   id: string;
   name: string;
-  type: 'document' | 'website';
+  type: 'document' | 'website' | 'text';
   status: 'Ready' | 'Processing';
   lastUpdatedAt: string;
 };

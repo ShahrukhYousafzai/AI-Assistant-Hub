@@ -36,6 +36,13 @@ export const mockDataSources: DataSource[] = [
     status: 'Ready',
     lastUpdatedAt: '2024-07-15T18:00:00Z',
   },
+  {
+    id: 'ds_6',
+    name: 'Refund Policy',
+    type: 'text',
+    status: 'Ready',
+    lastUpdatedAt: '2024-07-22T10:00:00Z'
+  }
 ];
 
 export const mockChatbots: Chatbot[] = [
@@ -63,7 +70,7 @@ export const mockChatbots: Chatbot[] = [
     status: 'Draft',
     lastUpdatedAt: '2024-07-19T16:45:00Z',
     monthlyConversations: 0,
-    knowledgeSources: ['ds_1', 'ds_2'],
+    knowledgeSources: ['ds_1', 'ds_2', 'ds_6'],
     multilingual: false,
   },
   {

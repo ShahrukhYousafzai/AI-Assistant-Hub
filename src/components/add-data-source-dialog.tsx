@@ -12,8 +12,9 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { FileUp, Globe, Loader2 } from 'lucide-react';
+import { FileUp, Globe, Loader2, FileText } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { Textarea } from '@/components/ui/textarea';
 
 type AddDataSourceDialogProps = {
   isOpen: boolean;
@@ -50,17 +51,20 @@ export function AddDataSourceDialog({
         <DialogHeader>
           <DialogTitle>Add Data Source</DialogTitle>
           <DialogDescription>
-            Add a new document or website to your knowledge library.
+            Add a new document, website, or text snippet to your knowledge library.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <Tabs defaultValue="upload" className="mt-4" onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="upload">
                 <FileUp className="mr-2 h-4 w-4" /> File Upload
               </TabsTrigger>
               <TabsTrigger value="website">
-                <Globe className="mr-2 h-4 w-4" /> Website Link
+                <Globe className="mr-2 h-4 w-4" /> Website
+              </TabsTrigger>
+              <TabsTrigger value="text">
+                <FileText className="mr-2 h-4 w-4" /> Text
               </TabsTrigger>
             </TabsList>
             <TabsContent value="upload" className="mt-4">
@@ -87,6 +91,22 @@ export function AddDataSourceDialog({
                 </label>
                 <Input id="url" placeholder="https://example.com/pricing" />
               </div>
+            </TabsContent>
+            <TabsContent value="text" className="mt-4">
+                <div className="space-y-4">
+                     <div className="space-y-2">
+                        <label htmlFor="source-name" className="text-sm font-medium">
+                            Source Name
+                        </label>
+                        <Input id="source-name" placeholder="e.g., Return Policy FAQ" />
+                    </div>
+                    <div className="space-y-2">
+                        <label htmlFor="content" className="text-sm font-medium">
+                            Content
+                        </label>
+                        <Textarea id="content" placeholder="Paste your text content here." className="min-h-[150px]" />
+                    </div>
+                </div>
             </TabsContent>
           </Tabs>
           <DialogFooter className="mt-6">
