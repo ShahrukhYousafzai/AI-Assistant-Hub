@@ -9,11 +9,12 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Bot, Send, User, Loader2 } from 'lucide-react';
+import { Bot, Send, User, Loader2, ThumbsUp, ThumbsDown } from 'lucide-react';
 import type { Chatbot } from '@/lib/types';
 import { useState, useRef, useEffect } from 'react';
 import { generateChatResponse } from '@/ai/flows/chat-response';
 import { mockDataSources } from '@/lib/mock-data';
+import { cn } from '@/lib/utils';
 
 type TestChatbotDialogProps = {
   chatbot: Chatbot | null;
@@ -22,8 +23,10 @@ type TestChatbotDialogProps = {
 };
 
 type Message = {
+    id: string;
     sender: 'user' | 'bot';
     text: string;
+    feedback?: 'good' | 'bad' | null;
 }
 
 // A simple function to determine if text should be light or dark
@@ -50,7 +53,7 @@ export function TestChatbotDialog({ chatbot, isOpen, onOpenChange }: TestChatbot
   useEffect(() => {
     if (isOpen) {
         setMessages([
-            { sender: 'bot', text: "Hello! I'm a preview of your bot. Ask me anything!"}
+            { id: 'initial', sender: 'bot', text: "Hello! I'm a preview of your bot. Ask me anything!"}
         ]);
         setInputValue('');
     }
@@ -71,12 +74,24 @@ export function TestChatbotDialog({ chatbot, isOpen, onOpenChange }: TestChatbot
   const backgroundColor = '#F5F5F5';
   const botMessageColor = '#E0E0E0';
 
+  const handleFeedback = (messageId: string, feedback: 'good' | 'bad') => {
+    setMessages(prev => prev.map(msg => {
+      if (msg.id === messageId) {
+        // If the same feedback is clicked again, reset it. Otherwise, set the new feedback.
+        return { ...msg, feedback: msg.feedback === feedback ? null : feedback };
+      }
+      return msg;
+    }));
+    // Here you would typically send this feedback to a logging service or database.
+    console.log(`Feedback for message ${messageId}: ${feedback}`);
+  };
+
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputValue.trim() || isResponding) return;
 
-    const userMessage: Message = { sender: 'user', text: inputValue };
+    const userMessage: Message = { id: crypto.randomUUID(), sender: 'user', text: inputValue };
     setMessages(prev => [...prev, userMessage]);
     setInputValue('');
     setIsResponding(true);
@@ -96,12 +111,12 @@ export function TestChatbotDialog({ chatbot, isOpen, onOpenChange }: TestChatbot
         knowledgeSourceNames: attachedSources,
       });
 
-      const botResponse: Message = { sender: 'bot', text: response.response };
+      const botResponse: Message = { id: crypto.randomUUID(), sender: 'bot', text: response.response, feedback: null };
       setMessages(prev => [...prev, botResponse]);
 
     } catch (error) {
       console.error("Failed to get chat response:", error);
-      const errorResponse: Message = { sender: 'bot', text: "Sorry, I encountered an error. Please try again." };
+      const errorResponse: Message = { id: crypto.randomUUID(), sender: 'bot', text: "Sorry, I encountered an error. Please try again." };
       setMessages(prev => [...prev, errorResponse]);
     } finally {
         setIsResponding(false);
@@ -128,15 +143,27 @@ export function TestChatbotDialog({ chatbot, isOpen, onOpenChange }: TestChatbot
             style={{backgroundColor: backgroundColor}}
         >
             {messages.map((message, index) => (
-                <div key={index} className={`flex items-start gap-3 ${message.sender === 'user' ? 'flex-row-reverse' : 'flex'}`}>
-                    <div className={`rounded-lg px-4 py-2 max-w-[80%] text-sm`}
-                        style={{
-                            backgroundColor: message.sender === 'bot' ? botMessageColor : primaryColor,
-                            color: getTextColor(message.sender === 'bot' ? botMessageColor : primaryColor),
-                        }}
-                    >
-                        {message.text}
+                <div key={index} className={`flex items-start gap-3 ${message.sender === 'user' ? 'flex-row-reverse' : 'flex-col'}`}>
+                     <div className={`flex items-start gap-3 ${message.sender === 'user' ? 'flex-row-reverse' : ''}`}>
+                        <div className={`rounded-lg px-4 py-2 max-w-[80%] text-sm`}
+                            style={{
+                                backgroundColor: message.sender === 'bot' ? botMessageColor : primaryColor,
+                                color: getTextColor(message.sender === 'bot' ? botMessageColor : primaryColor),
+                            }}
+                        >
+                            {message.text}
+                        </div>
                     </div>
+                    {message.sender === 'bot' && (
+                        <div className="flex items-center gap-2 mt-1 ml-2">
+                            <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => handleFeedback(message.id, 'good')}>
+                                <ThumbsUp className={cn("h-4 w-4", message.feedback === 'good' ? 'text-primary' : 'text-muted-foreground')} />
+                            </Button>
+                            <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => handleFeedback(message.id, 'bad')}>
+                                <ThumbsDown className={cn("h-4 w-4", message.feedback === 'bad' ? 'text-destructive' : 'text-muted-foreground')} />
+                            </Button>
+                        </div>
+                    )}
                 </div>
             ))}
              {isResponding && (
