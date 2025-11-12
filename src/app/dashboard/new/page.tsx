@@ -174,7 +174,7 @@ export default function NewChatbotPage() {
           </Card>
 
           <div className="flex justify-end">
-            <Button type="submit" size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">Create Chatbot</Button>
+            <Button type="submit" size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">Create Chatbot</Button>
           </div>
         </form>
       </Form>

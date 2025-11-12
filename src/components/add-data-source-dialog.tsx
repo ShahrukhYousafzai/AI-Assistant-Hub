@@ -93,7 +93,7 @@ export function AddDataSourceDialog({
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isProcessing}>
               Cancel
             </Button>
-            <Button type="submit" disabled={isProcessing} className="bg-accent text-accent-foreground hover:bg-accent/90">
+            <Button type="submit" disabled={isProcessing} className="bg-primary text-primary-foreground hover:bg-primary/90">
               {isProcessing ? (
                 <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Processing...</>
               ) : (

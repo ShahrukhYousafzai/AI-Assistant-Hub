@@ -348,7 +348,7 @@ export default function EditChatbotPage() {
                 <MessageSquare className="mr-2 h-4 w-4" />
                 Test Chatbot
             </Button>
-            <Button type="submit" size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">Save Changes</Button>
+            <Button type="submit" size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">Save Changes</Button>
           </div>
         </form>
       </Form>
