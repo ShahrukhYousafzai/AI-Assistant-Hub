@@ -3,6 +3,8 @@
 import {
   Dialog,
   DialogContent,
+  DialogHeader,
+  DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -141,17 +143,14 @@ export function TestChatbotDialog({ chatbot, isOpen, onOpenChange }: TestChatbot
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md p-0 flex flex-col h-[70vh] max-h-[600px]">
-        <div 
-            className="flex items-center justify-between p-4 flex-shrink-0"
-            style={{backgroundColor: primaryColor, color: getTextColor(primaryColor)}}
-        >
-            <div className="flex items-center gap-3">
-                <div className="h-9 w-9 rounded-full bg-white/20 flex items-center justify-center">
+        <DialogHeader className="p-4 flex-shrink-0" style={{backgroundColor: primaryColor, color: getTextColor(primaryColor)}}>
+            <DialogTitle className="flex items-center gap-3">
+                 <div className="h-9 w-9 rounded-full bg-white/20 flex items-center justify-center">
                     <Bot className="h-5 w-5" />
                 </div>
                 <p className="font-semibold text-lg">{chatbot.name}</p>
-            </div>
-        </div>
+            </DialogTitle>
+        </DialogHeader>
         <div 
             ref={chatContainerRef} 
             className="flex-1 space-y-6 overflow-y-auto p-4"
