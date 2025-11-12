@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
-import { ClipboardCopy, Globe, Code } from 'lucide-react';
+import { ClipboardCopy, Globe, Code, Frame } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { mockChatbots } from '@/lib/mock-data';
 import type { Chatbot } from '@/lib/types';
@@ -20,6 +20,7 @@ export default function DeploymentPage() {
 
   const embedCode = selectedChatbot ? `<script src="https://example.com/widget.js" data-bot-id="${selectedChatbot.id}" async defer></script>` : '';
   const directLink = selectedChatbot ? `https://chat.example.com/${selectedChatbot.id}` : '';
+  const iframeCode = selectedChatbot ? `<iframe src="${directLink}" width="100%" height="500" frameborder="0"></iframe>` : '';
 
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -57,7 +58,7 @@ export default function DeploymentPage() {
       </Card>
 
       {selectedChatbot && (
-         <div className="grid gap-8 md:grid-cols-2">
+         <div className="grid gap-8 md:grid-cols-1 lg:grid-cols-2">
             <Card>
                 <CardHeader className="flex flex-row items-center gap-4 space-y-0">
                     <div className="p-3 rounded-lg bg-secondary">
@@ -65,12 +66,12 @@ export default function DeploymentPage() {
                     </div>
                     <div>
                         <CardTitle>Embed on Your Website</CardTitle>
-                        <CardDescription>Add a chat widget to your site.</CardDescription>
+                        <CardDescription>Add a floating chat widget to your site.</CardDescription>
                     </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
                      <p className="text-sm text-muted-foreground">
-                        Copy and paste this snippet into the HTML of your website where you want the chat widget to appear.
+                        Copy and paste this snippet into your website's HTML to add a floating chat bubble.
                     </p>
                     <div className="relative">
                         <Textarea value={embedCode} readOnly className="pr-12 h-32 font-mono text-xs bg-secondary" />
@@ -106,6 +107,33 @@ export default function DeploymentPage() {
                         size="icon"
                         className="absolute top-1/2 right-1 -translate-y-1/2 h-8 w-8"
                         onClick={() => handleCopy(directLink)}
+                        >
+                        <ClipboardCopy className="h-4 w-4" />
+                        </Button>
+                    </div>
+                </CardContent>
+            </Card>
+            <Card className="lg:col-span-2">
+                <CardHeader className="flex flex-row items-center gap-4 space-y-0">
+                    <div className="p-3 rounded-lg bg-secondary">
+                        <Frame className="h-6 w-6 text-secondary-foreground" />
+                    </div>
+                    <div>
+                        <CardTitle>Embed as an Iframe</CardTitle>
+                        <CardDescription>Integrate the chat directly into a page section.</CardDescription>
+                    </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                     <p className="text-sm text-muted-foreground">
+                        Use this iframe code to embed the chatbot within a specific part of your website layout.
+                    </p>
+                    <div className="relative">
+                        <Textarea value={iframeCode} readOnly className="pr-12 h-32 font-mono text-xs bg-secondary" />
+                        <Button
+                        variant="ghost"
+                        size="icon"
+                        className="absolute top-2 right-2 h-7 w-7"
+                        onClick={() => handleCopy(iframeCode)}
                         >
                         <ClipboardCopy className="h-4 w-4" />
                         </Button>
