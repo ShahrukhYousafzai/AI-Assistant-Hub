@@ -24,19 +24,20 @@ type DeployChatbotDialogProps = {
 
 export function DeployChatbotDialog({ chatbot, isOpen, onOpenChange }: DeployChatbotDialogProps) {
   const { toast } = useToast();
-  const [origin, setOrigin] = useState('');
+  const [directLink, setDirectLink] = useState('');
+  const [embedCode, setEmbedCode] = useState('');
+  const [iframeCode, setIframeCode] = useState('');
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setOrigin(window.location.origin);
+    if (typeof window !== 'undefined' && chatbot) {
+      const origin = window.location.origin;
+      setDirectLink(`${origin}/c/${chatbot.id}`);
+      setEmbedCode(`<script src="${origin}/widget.js" data-bot-id="${chatbot.id}" async defer></script>`);
+      setIframeCode(`<iframe src="${origin}/c/${chatbot.id}" width="100%" height="500" frameborder="0"></iframe>`);
     }
-  }, []);
+  }, [chatbot]);
 
   if (!chatbot) return null;
-
-  const directLink = `${origin}/c/${chatbot.id}`;
-  const embedCode = `<script src="${origin}/widget.js" data-bot-id="${chatbot.id}" async defer></script>`;
-  const iframeCode = `<iframe src="${directLink}" width="100%" height="500" frameborder="0"></iframe>`;
 
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
