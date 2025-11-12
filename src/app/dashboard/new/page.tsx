@@ -31,6 +31,7 @@ const newChatbotFormSchema = z.object({
   persona: z.string().min(10, {
     message: 'Persona description must be at least 10 characters.',
   }),
+  greetingMessage: z.string().optional(),
   knowledgeSourceIds: z
     .array(z.string())
     .refine((value) => value.some((item) => item), {
@@ -49,6 +50,7 @@ export default function NewChatbotPage() {
     defaultValues: {
       name: '',
       persona: '',
+      greetingMessage: '',
       knowledgeSourceIds: [],
       multilingual: false,
       suggestionBubbles: true,
@@ -93,6 +95,25 @@ export default function NewChatbotPage() {
                       <Input placeholder="e.g., Q1 2024 Product Bot" {...field} />
                     </FormControl>
                     <FormDescription>Give your new bot a unique name.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+               <FormField
+                control={form.control}
+                name="greetingMessage"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Greeting Message</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="e.g., Hello! How can I help you today?"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      The first message the bot sends to a user. Leave blank for default.
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

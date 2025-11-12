@@ -55,6 +55,7 @@ export const mockChatbots: Chatbot[] = [
     knowledgeSources: ['ds_2', 'ds_5'],
     multilingual: true,
     suggestionBubbles: true,
+    greetingMessage: 'Hello! How can I assist you with our products and services today?',
   },
   {
     id: 'bot_2',
@@ -65,6 +66,7 @@ export const mockChatbots: Chatbot[] = [
     knowledgeSources: ['ds_3'],
     multilingual: false,
     suggestionBubbles: false,
+    greetingMessage: 'Welcome! I can answer questions about the employee handbook.',
   },
   {
     id: 'bot_3',
@@ -85,6 +87,7 @@ export const mockChatbots: Chatbot[] = [
     knowledgeSources: ['ds_4'],
     multilingual: true,
     suggestionBubbles: false,
+    greetingMessage: 'API Helper here. Ask me about endpoints, authentication, or query parameters.',
   },
 ];
 

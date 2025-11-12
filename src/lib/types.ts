@@ -7,6 +7,7 @@ export type Chatbot = {
   knowledgeSources: string[]; // Array of DataSource IDs
   multilingual: boolean;
   suggestionBubbles: boolean;
+  greetingMessage?: string;
 };
 
 export type DataSource = {

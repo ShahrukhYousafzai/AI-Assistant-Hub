@@ -45,8 +45,9 @@ export function PublicChatView({ chatbot }: PublicChatViewProps) {
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const greeting = chatbot.greetingMessage || `Hello! I'm ${chatbot.name}. Ask me anything!`;
     setMessages([
-        { id: 'initial', sender: 'bot', text: `Hello! I'm ${chatbot.name}. Ask me anything!` }
+        { id: 'initial', sender: 'bot', text: greeting }
     ]);
     setInputValue('');
   }, [chatbot]);

@@ -34,6 +34,7 @@ const editChatbotFormSchema = z.object({
   persona: z.string().min(10, {
     message: 'Persona description must be at least 10 characters.',
   }),
+  greetingMessage: z.string().optional(),
   knowledgeSourceIds: z
     .array(z.string())
     .refine((value) => value.some((item) => item), {
@@ -73,6 +74,7 @@ export default function EditChatbotPage() {
     defaultValues: {
       name: '',
       persona: 'This bot is friendly and helpful.', // Default persona
+      greetingMessage: '',
       knowledgeSourceIds: [],
       primaryColor: '#6366F1',
       backgroundColor: '#111827',
@@ -92,6 +94,7 @@ export default function EditChatbotPage() {
         name: chatbot.name,
         // A real implementation would fetch the full persona text
         persona: `This bot is based on ${chatbot.name}.`,
+        greetingMessage: chatbot.greetingMessage,
         knowledgeSourceIds: chatbot.knowledgeSources,
         primaryColor: '#6366F1',
         backgroundColor: '#111827',
@@ -160,6 +163,25 @@ export default function EditChatbotPage() {
                             <FormMessage />
                         </FormItem>
                         )}
+                    />
+                     <FormField
+                      control={form.control}
+                      name="greetingMessage"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Greeting Message</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              placeholder="e.g., Hello! How can I help you today?"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormDescription>
+                            The first message the bot sends to a user.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
                     />
                     <FormField
                         control={form.control}
@@ -389,7 +411,7 @@ export default function EditChatbotPage() {
                                     className="max-w-[75%] rounded-lg p-3 text-sm"
                                     style={{backgroundColor: watchBotMessageColor, color: getTextColor(watchBotMessageColor)}}
                                     >
-                                        Hello! How can I help you today?
+                                        {form.watch('greetingMessage') || 'Hello! How can I help you today?'}
                                     </div>
                                     <div className="flex justify-end">
                                         <div 

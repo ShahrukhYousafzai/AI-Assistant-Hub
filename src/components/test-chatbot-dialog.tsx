@@ -53,8 +53,9 @@ export function TestChatbotDialog({ chatbot, isOpen, onOpenChange }: TestChatbot
 
   useEffect(() => {
     if (isOpen && chatbot) {
+        const greeting = chatbot.greetingMessage || `Hello! I'm a preview of ${chatbot.name}. Ask me anything!`;
         setMessages([
-            { id: 'initial', sender: 'bot', text: `Hello! I'm a preview of ${chatbot.name}. Ask me anything!`}
+            { id: 'initial', sender: 'bot', text: greeting}
         ]);
         setInputValue('');
         setActiveSuggestions([]);
