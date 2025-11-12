@@ -1,1 +1,5 @@
-// Flows will be imported for their side effects in this file.
+import { config } from 'dotenv';
+config();
+
+import '@/ai/flows/ai-data-processing.ts';
+import '@/ai/flows/chatbot-personality-builder.ts';

@@ -1,0 +1,74 @@
+import { Chatbot, DataSource } from './types';
+
+export const mockDataSources: DataSource[] = [
+  {
+    id: 'ds_1',
+    name: 'Product-Roadmap.pdf',
+    type: 'document',
+    status: 'Ready',
+    lastUpdatedAt: '2024-07-20T10:00:00Z',
+  },
+  {
+    id: 'ds_2',
+    name: 'Pricing Page',
+    type: 'website',
+    status: 'Ready',
+    lastUpdatedAt: '2024-07-19T14:30:00Z',
+  },
+  {
+    id: 'ds_3',
+    name: 'Employee-Handbook-v2.docx',
+    type: 'document',
+    status: 'Ready',
+    lastUpdatedAt: '2024-07-18T09:00:00Z',
+  },
+  {
+    id: 'ds_4',
+    name: 'API-Documentation.pdf',
+    type: 'document',
+    status: 'Processing',
+    lastUpdatedAt: '2024-07-21T11:00:00Z',
+  },
+  {
+    id: 'ds_5',
+    name: 'Blog Home',
+    type: 'website',
+    status: 'Ready',
+    lastUpdatedAt: '2024-07-15T18:00:00Z',
+  },
+];
+
+export const mockChatbots: Chatbot[] = [
+  {
+    id: 'bot_1',
+    name: 'Customer Support Bot',
+    status: 'Live',
+    lastUpdatedAt: '2024-07-20T11:30:00Z',
+    monthlyConversations: 1254,
+    knowledgeSources: ['ds_2', 'ds_5'],
+  },
+  {
+    id: 'bot_2',
+    name: 'Employee Handbook Bot',
+    status: 'Live',
+    lastUpdatedAt: '2024-07-18T10:00:00Z',
+    monthlyConversations: 321,
+    knowledgeSources: ['ds_3'],
+  },
+  {
+    id: 'bot_3',
+    name: 'E-commerce FAQ Bot',
+    status: 'Draft',
+    lastUpdatedAt: '2024-07-19T16:45:00Z',
+    monthlyConversations: 0,
+    knowledgeSources: ['ds_1', 'ds_2'],
+  },
+  {
+    id: 'bot_4',
+    name: 'Developer API Helper',
+    status: 'Live',
+    lastUpdatedAt: '2024-07-21T12:00:00Z',
+    monthlyConversations: 890,
+    knowledgeSources: ['ds_4'],
+  },
+];
