@@ -1,5 +1,7 @@
 # AI Assistant Hub
 
+![AI Assistant Hub Preview](https://i.ibb.co/LX81V6NT/Screenshot-2026-03-20-at-9-16-50-AM.png)
+
 AI Assistant Hub is a powerful, self-service platform designed to let users create, train, and deploy custom AI chatbots in minutes. By leveraging Google's Gemini models via Genkit, the platform allows for sophisticated personality engineering, multi-source knowledge retrieval, and seamless deployment across various channels.
 
 ## 🚀 Overview
@@ -24,6 +26,7 @@ The goal of this project is to provide a "No-Code" interface for building RAG (R
 - [x] **Data Source Library:** Centralized repository for knowledge sources (Documents, Websites, and Raw Text).
 - [x] **Persona Builder:** Define custom instructions, rules, and personality traits for each bot.
 - [x] **Custom Greetings:** Set unique welcome messages for different user contexts.
+- [x] **Simple Content Editor:** Directly paste text/FAQs into the knowledge base.
 
 ### AI Capabilities (Genkit Powered)
 - [x] **Multilingual Support:** Auto-detection and response translation using Gemini's linguistic prowess.
