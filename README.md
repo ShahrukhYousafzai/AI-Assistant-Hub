@@ -71,4 +71,4 @@ The goal of this project is to provide a "No-Code" interface for building RAG (R
    ```
 
 ---
-Built with ❤️ using Firebase Studio and Google AI.
+Built with ❤️ by Shahrukh Yousafzai
